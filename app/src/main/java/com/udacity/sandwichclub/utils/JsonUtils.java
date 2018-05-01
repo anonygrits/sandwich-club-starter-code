@@ -13,16 +13,16 @@ public class JsonUtils {
 
     public static Sandwich parseSandwichJson(String json) throws JSONException {
         if (json.equals("")) {
-            throw new JSONException("no data available");
+            return null;
         }
 
         JSONObject sandwichJSON = new JSONObject(json);
 
         /* get embedded arrays and convert to list of strings */
-        JSONArray akaJSONArray  = new JSONArray(sandwichJSON.optJSONArray("alsoKnownAs"));
+        JSONArray akaJSONArray = new JSONArray(sandwichJSON.optJSONArray("alsoKnownAs"));
         List<String> parsedAkaList = Arrays.asList(akaJSONArray.toString());
 
-        JSONArray ingredientsJSONArray  = new JSONArray(sandwichJSON.optJSONArray("ingredients"));
+        JSONArray ingredientsJSONArray = new JSONArray(sandwichJSON.optJSONArray("ingredients"));
         List<String> parsedIngredientsList = Arrays.asList(ingredientsJSONArray.toString());
 
         /* create and populate Sandwich object */
@@ -36,3 +36,4 @@ public class JsonUtils {
         return sandwich;
     }
 }
+

@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,17 +18,28 @@ public class JsonUtils {
         }
 
         JSONObject sandwichJSON = new JSONObject(json);
+        JSONObject sandwichNameJSON = sandwichJSON.getJSONObject("name");
 
         /* get embedded arrays and convert to list of strings */
-        JSONArray akaJSONArray = new JSONArray(sandwichJSON.optJSONArray("alsoKnownAs"));
-        List<String> parsedAkaList = Arrays.asList(akaJSONArray.toString());
+        List<String> parsedAkaList = new ArrayList<>();
+        JSONArray akaJSONArray = sandwichNameJSON.optJSONArray("alsoKnownAs");
+        if (akaJSONArray != null) {
+            for (int i=0; i<akaJSONArray.length(); i++) {
+                parsedAkaList.add(akaJSONArray.getString(i) );
+            }
+        }
 
-        JSONArray ingredientsJSONArray = new JSONArray(sandwichJSON.optJSONArray("ingredients"));
-        List<String> parsedIngredientsList = Arrays.asList(ingredientsJSONArray.toString());
+        List<String> parsedIngredientsList = new ArrayList<>();
+        JSONArray ingredientsJSONArray = sandwichJSON.optJSONArray("ingredients");
+        if (ingredientsJSONArray != null) {
+            for (int i=0; i<ingredientsJSONArray.length(); i++) {
+                parsedIngredientsList.add(ingredientsJSONArray.getString(i) );
+            }
+        }
 
         /* create and populate Sandwich object */
         Sandwich sandwich = new Sandwich();
-        sandwich.setMainName(sandwichJSON.optString("mainName"));
+        sandwich.setMainName(sandwichNameJSON.optString("mainName"));
         sandwich.setAlsoKnownAs(parsedAkaList);
         sandwich.setDescription(sandwichJSON.optString("description"));
         sandwich.setIngredients(parsedIngredientsList);
